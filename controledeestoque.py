@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import messagebox
 import psycopg2
 
-# Função para conectar ao banco de dados
 def conectar_banco():
     try:
         connection = psycopg2.connect(
@@ -18,7 +17,6 @@ def conectar_banco():
         messagebox.showerror("Erro", f"Erro ao conectar ao banco de dados: {e}")
         return None
 
-# Função para consultar o banco de dados e exibir os resultados na Treeview
 def consultar(treeview, codigo_material):
     try:
         connection = conectar_banco()
@@ -58,7 +56,6 @@ def consultar_desc(treeview, codigo_descr):
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao consultar o banco de dados: {e}")       
 
-# Função para abrir a janela de entrada de material
 def entrada_material():
     def salvar_material():
         codigo = codigo_entry.get()
@@ -113,7 +110,6 @@ def entrada_material():
     
     tk.Button(entrada_window, text="Salvar", command=salvar_material).grid(row=5, column=0, columnspan=2, pady=10)
 
-# Função para abrir a janela de saída de material
 def saida_material():
     def salvar_saida():
         codigo = codigo_entry.get()
@@ -153,12 +149,10 @@ def saida_material():
     
     tk.Button(saida_window, text="Salvar", command=salvar_saida).grid(row=2, column=0, columnspan=2, pady=10)
 
-# Função para criar a interface gráfica
 def criar_interface():
     root = tk.Tk()
     root.title("Gerenciador de Estoque - Python")
 
-    # Configuração da Treeview
     treeview = ttk.Treeview(root, columns=("id", "descricao", "tipo", "unidade_medida", "quantidade"), show="headings")
     treeview.heading("id", text="Código")
     treeview.heading("descricao", text="Descrição")
@@ -167,11 +161,9 @@ def criar_interface():
     treeview.heading("quantidade", text="Quantidade")
     treeview.pack(side=tk.LEFT, fill=tk.BOTH, padx=10, pady=10)
 
-    # Frame para os botões e a caixa de pesquisa
     frame = tk.Frame(root)
     frame.pack(side=tk.RIGHT, fill=tk.Y, padx=10, pady=10)
 
-    # Caixa de pesquisa
     tk.Label(frame, text="Código do Material:").pack(padx=5, pady=5)
     codigo_entry = tk.Entry(frame)
     codigo_entry.pack(padx=5, pady=5)
@@ -180,26 +172,21 @@ def criar_interface():
     codigo_desc = tk.Entry(frame)
     codigo_desc.pack(padx=5, pady=5)
 
-    # Botão para consultar o banco de dados
     consultar_button = tk.Button(frame, text="Consultar", command=lambda: consultar(treeview, codigo_entry.get()))
     consultar_button.pack(fill=tk.X, padx=5, pady=5)
 
     consultardesc_button = tk.Button(frame, text="Consultar Descrição", command=lambda: consultar_desc(treeview, codigo_desc.get()))
     consultardesc_button.pack(fill=tk.X, padx=5, pady=5)
 
-    # Botão para entrada de material
     entrada_button = tk.Button(frame, text="Entrada", command=entrada_material)
     entrada_button.pack(fill=tk.X, padx=5, pady=5)
 
-    # Botão para saída de material
     saida_button = tk.Button(frame, text="Saída", command=saida_material)
     saida_button.pack(fill=tk.X, padx=5, pady=5)
 
-    # Botão para sair da aplicação
     sair_button = tk.Button(frame, text="Sair", command=root.quit)
     sair_button.pack(fill=tk.X, padx=5, pady=5)
 
     root.mainloop()
 
-# Chamada para iniciar a interface
 criar_interface()
